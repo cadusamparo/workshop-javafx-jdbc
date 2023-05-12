@@ -37,7 +37,7 @@ public class DepartmentListController implements Initializable, DataChangeListen
 	private DepartmentService service;
 
 	@FXML
-	private TableView<Department> tableViewDepartmet;
+	private TableView<Department> tableViewDepartment;
 
 	@FXML
 	private TableColumn<Department, Integer> tableColumnId;
@@ -49,7 +49,7 @@ public class DepartmentListController implements Initializable, DataChangeListen
 	private TableColumn<Department, Department> tableColumnEDIT;
 
 	@FXML
-	TableColumn<Department, Department> tableColumnREMOVE;
+	private TableColumn<Department, Department> tableColumnREMOVE;
 
 	@FXML
 	private Button btNew;
@@ -63,7 +63,7 @@ public class DepartmentListController implements Initializable, DataChangeListen
 		createDialogForm(obj, "/gui/DepartmentForm.fxml", parentStage);
 	}
 
-	public void setDepartentService(DepartmentService service) {
+	public void setDepartmentService(DepartmentService service) {
 		this.service = service;
 	}
 
@@ -74,21 +74,19 @@ public class DepartmentListController implements Initializable, DataChangeListen
 
 	private void initializeNodes() {
 		tableColumnId.setCellValueFactory(new PropertyValueFactory<>("id"));
-		tableColumnName.setCellValueFactory(new PropertyValueFactory<>("Name"));
+		tableColumnName.setCellValueFactory(new PropertyValueFactory<>("name"));
 
 		Stage stage = (Stage) Main.getMainScene().getWindow();
-		tableViewDepartmet.prefHeightProperty().bind(stage.heightProperty());
-
+		tableViewDepartment.prefHeightProperty().bind(stage.heightProperty());
 	}
 
 	public void updateTableView() {
 		if (service == null) {
 			throw new IllegalStateException("Service was null");
 		}
-
 		List<Department> list = service.findAll();
 		obsList = FXCollections.observableArrayList(list);
-		tableViewDepartmet.setItems(obsList);
+		tableViewDepartment.setItems(obsList);
 		initEditButtons();
 		initRemoveButtons();
 	}
@@ -101,7 +99,6 @@ public class DepartmentListController implements Initializable, DataChangeListen
 			DepartmentFormController controller = loader.getController();
 			controller.setDepartment(obj);
 			controller.setDepartmentService(new DepartmentService());
-
 			controller.subscribeDataChangeListener(this);
 			controller.updateFormData();
 
@@ -112,16 +109,15 @@ public class DepartmentListController implements Initializable, DataChangeListen
 			dialogStage.initOwner(parentStage);
 			dialogStage.initModality(Modality.WINDOW_MODAL);
 			dialogStage.showAndWait();
-
 		} catch (IOException e) {
-			Alerts.showAlert("Io Exception", "Error loading view", e.getMessage(), AlertType.ERROR);
+			e.printStackTrace();
+			Alerts.showAlert("IO Exception", "Error loading view", e.getMessage(), AlertType.ERROR);
 		}
 	}
 
 	@Override
 	public void onDataChanged() {
 		updateTableView();
-
 	}
 
 	private void initEditButtons() {
@@ -177,5 +173,4 @@ public class DepartmentListController implements Initializable, DataChangeListen
 			}
 		}
 	}
-
 }
