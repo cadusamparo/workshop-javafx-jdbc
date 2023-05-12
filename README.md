@@ -36,6 +36,7 @@ Essa aplicação tem como objetivo exibir uma lista de vendedores e departamento
 
 ## Implementação
 -MySQL
+
 -Scene Builder
 
 # Autor
